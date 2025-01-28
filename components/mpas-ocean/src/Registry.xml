@@ -717,6 +717,14 @@
 					description="The length scale of exponential decay of subglacial runoff, used when config_sgr_flux_vertical_location is 'top' or 'bottom'. Fluxes are multiplied by $e^{z/\gamma}$, where this coefficient is $\gamma$."
 					possible_values="Any positive real number."
 		/>
+		<nml_option name="config_use_atmospheric_river_temp" type="logical" default_value=".false."
+					description="If true, sets river temperatures equal to the lowest level atmospheric air temperature from coupler. If false, river temperatures are calculated using the nearest neighbor SST."
+					possible_values=".true. or .false."
+		/>
+		<nml_option name="config_atmospheric_river_temp_max" type="real" default_value="30.0" units="C"
+					description="The maximum atmospheric temperature from coupler used to prescribe river temperatures."
+					possible_values="Any positive real number."
+		/>
 		<nml_option name="config_sgr_flux_vertical_location" type="character" default_value="bottom"
 					description="Selects the vertical location where subglacial runoff is fluxed."
 					possible_values="'top','uniform', 'bottom'"
@@ -1711,7 +1719,6 @@
 		<package name="timeVaryingAtmosphericForcingPKG" description="This package includes variables required for time varying atmospheric forcing"/>
 		<package name="timeVaryingLandIceForcingPKG" description="This package includes variavles required for time varying land-ice forcing"/>
 		<package name="variableShortwave" description="This package includes variables required to compute spatially variable shortwave extinction coefficients"/>
-
 		<package name="splitTimeIntegrator" description="This package includes variables required for either the split or unsplit explicit time integrators."/>
 		<package name="splitAB2TimeIntegrator" description="This package includes variables required for the split explicit AB2 time integrators."/>
 		<package name="semiImplicitTimePKG" description="This package includes variables required for split-implicit time integrators."/>
@@ -3817,7 +3824,6 @@
 		<var name="icebergTemperatureFlux" type="real" dimensions="nCells Time" units="C m s^-1"
 			 description="Heat flux associated with iceberg melt at cell centers sent to coupler. Positive into the ocean."
 		/>
-
 		<var name="totalFreshWaterTemperatureFlux" type="real" dimensions="nCells Time" units="C m s^-1"
 			 description="Sum of heat fluxes associated with water fluxes cell centers sent to coupler. Positive into the ocean."
 		/>
@@ -3840,6 +3846,9 @@
 		<var name="riverRunoffFlux" type="real" dimensions="nCells Time" units="kg m^-2 s^-1"
 			 description="Fresh water flux from river runoff at cell centers from coupler. Positive into the ocean."
 			 packages="thicknessBulkPKG"
+		/>
+   		<var name="atmosphericTbot" type="real" dimensions="nCells Time" units="C"
+			 description="Temperature at the lowest atmospheric level from coupler."
 		/>
 		<var name="subglacialRunoffFlux" type="real" dimensions="nCells Time" units="kg m^-2 s^-1"
 			 description="Fresh water flux from subglacial runoff at cell centers from ice sheet model. Positive into the ocean."

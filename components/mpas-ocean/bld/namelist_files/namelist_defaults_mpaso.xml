@@ -353,6 +353,8 @@
 <config_use_bulk_thickness_flux>.true.</config_use_bulk_thickness_flux>
 <config_flux_attenuation_coefficient>0.001</config_flux_attenuation_coefficient>
 <config_flux_attenuation_coefficient_runoff>10.0</config_flux_attenuation_coefficient_runoff>
+<config_use_atmospheric_river_temp>.false.</config_use_atmospheric_river_temp>
+<config_atmospheric_river_temp_max>30.0</config_atmospheric_river_temp_max>
 <config_subglacial_runoff_mode>'off'</config_subglacial_runoff_mode>
 <config_flux_attenuation_coefficient_subglacial_runoff>0.001</config_flux_attenuation_coefficient_subglacial_runoff>
 <config_sgr_flux_vertical_location>'bottom'</config_sgr_flux_vertical_location>

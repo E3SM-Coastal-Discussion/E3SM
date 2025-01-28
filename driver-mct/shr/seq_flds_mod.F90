@@ -718,6 +718,7 @@ contains
        call seq_flds_add(a2x_states_to_rof,"Sa_tbot")
     endif
     call seq_flds_add(x2w_states,"Sa_tbot")
+    call seq_flds_add(x2o_states,"Sa_tbot")
     longname = 'Temperature at the lowest model level'
     stdname  = 'air_temperature'
     units    = 'K'
