@@ -1260,6 +1260,46 @@ Valid values: Any positive real number
 Default: Defined in namelist_defaults.xml
 </entry>
 
+<entry id="config_use_custom_river_fluxes" type="logical"
+	category="forcing" group="forcing">
+If true, replace riverRunoffFlux from the coupeler over a prescribed box.
+
+Valid values: .true. or .false.
+Default: Defined in namelist_defaults.xml
+</entry>
+    
+<entry id="config_custom_river_fluxes_lower_latitude" type="real"
+       category="forcing" group="forcing">
+The lower latitude bound of prescribed river volume fluxes.
+ 
+Valid Values: Any number -pi/2 to pi/2 (-90 to 90 degrees)
+Default: Defined in namelist_defaults.xml
+</entry>
+
+<entry id="config_custom_river_fluxes_upper_latitude" type="real"
+       category="forcing" group="forcing">
+The upper latitude bound of prescribed river volume fluxes.
+ 
+Valid Values: Any number -pi/2 to pi/2 (-90 to 90 degrees)
+Default: Defined in namelist_defaults.xml
+</entry>
+ 
+<entry id="config_custom_river_fluxes_right_longitude" type="real"
+       category="forcing" group="forcing">
+The right longitude bound of prescribed river volume fluxes.
+
+Valid Values: Any number 0 to 2*pi (0 to 360 degrees)
+Default: Defined in namelist_defaults.xml
+</entry>
+ 
+<entry id="config_custom_river_fluxes_left_longitude" type="real"
+       category="forcing" group="forcing">
+The left longitude bound of prescribed river volume fluxes.
+ 
+Valid Values: Any number0 to 2*pi (0 to 360 degrees)
+Default: Defined in namelist_defaults.xml
+</entry>
+
 
 <!-- coupling -->
 

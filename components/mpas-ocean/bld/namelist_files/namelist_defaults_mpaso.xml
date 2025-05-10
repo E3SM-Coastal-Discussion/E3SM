@@ -371,7 +371,12 @@
 <config_use_sgr_opt_salt_prescribed>.false.</config_use_sgr_opt_salt_prescribed>
 <config_sgr_temperature_prescribed>0.0</config_sgr_temperature_prescribed>
 <config_sgr_salinity_prescribed>0.0</config_sgr_salinity_prescribed>
-
+<config_use_custom_river_fluxes>.false.</config_use_custom_river_fluxes>
+<config_custom_river_fluxes_lower_latitude>0.0</config_custom_river_fluxes_lower_latitude>
+<config_custom_river_fluxes_left_longitude>0.0</config_custom_river_fluxes_left_longitude>
+<config_custom_river_fluxes_upper_latitude>0.0</config_custom_river_fluxes_upper_latitude>
+<config_custom_river_fluxes_right_longitude>0.0</config_custom_river_fluxes_right_longitude>
+    
 <!-- coupling -->
 <config_remove_ais_river_runoff>.false.</config_remove_ais_river_runoff>
 <config_remove_ais_ice_runoff>.false.</config_remove_ais_ice_runoff>

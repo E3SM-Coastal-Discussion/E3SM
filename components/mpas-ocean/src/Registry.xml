@@ -741,7 +741,26 @@
 					description="Prescribed subglacial runoff salinity value, applied when config_use_sgr_opt_salt_prescribed = .true."
 					possible_values="Any positive real number"
 		/>
-
+        <nml_option name="config_use_custom_river_fluxes" type="logical" default_value=".false."
+					description="If true, replace riverRunoffFlux from the coupeler over a prescribed box."
+					possible_values=".true. or .false."
+		/> 
+        <nml_option name="config_custom_river_fluxes_lower_latitude" type="real" default_value="0.0" units="radians"
+                	description="The lower latitude bound of the custom river flux box."
+            	    possible_values="Any real number"
+	    />
+        <nml_option name="config_custom_river_fluxes_upper_latitude" type="real" default_value="0.0" units="radians"
+                	description="The upper latitude bound of the custom river flux box."
+            	    possible_values="Any real number"
+	    />
+        <nml_option name="config_custom_river_fluxes_left_longitude" type="real" default_value="0.0" units="radians"
+                	description="The left longitude bound of the custom river flux box."
+            	    possible_values="Any positive real number"
+	    />
+        <nml_option name="config_custom_river_fluxes_right_longitude" type="real" default_value="0.0" units="radians"
+                	description="The left longitude bound of the custom river flux box."
+            	    possible_values="Any positive real number"
+	    />
 	</nml_record>
 	<nml_record name="time_varying_forcing" mode="init;forward">
 		<nml_option name="config_use_time_varying_atmospheric_forcing" type="logical" default_value=".false."
@@ -3744,6 +3763,9 @@
 			 description="Bottom drag Cd coefficient in cells."
 			 packages="variableBottomDragPKG"
 		/>
+        <var name="riverTransport" type="real" dimensions="nCells Time" units="m^3 s^-1" name_in_code="riverTransport"
+             description="Fresh water volume flux from river runoff at cell centers from time varying data."
+        />
 		<var name="nForcingGroupCounter"		type="integer"	dimensions="Time"/>
 		<var name="forcingGroupNames"			type="text"	dimensions="nForcingGroupsMax Time"/>
 		<var name="forcingGroupRestartTimes"		type="text"	dimensions="nForcingGroupsMax Time"/>

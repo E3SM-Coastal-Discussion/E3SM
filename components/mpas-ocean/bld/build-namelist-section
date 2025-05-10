@@ -233,6 +233,11 @@ add_default($nl, 'config_use_sgr_opt_temp_prescribed');
 add_default($nl, 'config_use_sgr_opt_salt_prescribed');
 add_default($nl, 'config_sgr_temperature_prescribed');
 add_default($nl, 'config_sgr_salinity_prescribed');
+add_default($nl, 'config_use_custom_river_fluxes');
+add_default($nl, 'config_custom_river_fluxes_lower_latitude');
+add_default($nl, 'config_custom_river_fluxes_left_longitude');
+add_default($nl, 'config_custom_river_fluxes_upper_latitude');
+add_default($nl, 'config_custom_river_fluxes_right_longitude');
 
 ############################
 # Namelist group: coupling #

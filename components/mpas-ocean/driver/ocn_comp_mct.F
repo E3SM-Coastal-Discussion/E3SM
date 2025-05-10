@@ -1957,14 +1957,20 @@ contains
                        config_use_CFCTracers,  &
                        config_remove_ais_river_runoff, &
                        config_remove_ais_ice_runoff, &
-                       config_cvmix_kpp_use_theory_wave
+                       config_cvmix_kpp_use_theory_wave, & 
+                       config_use_custom_river_fluxes
 
    character(len=StrKIND), pointer :: config_ecosys_atm_co2_option, &
                                       config_ecosys_atm_alt_co2_option
 
    real (kind=RKIND), pointer :: config_ecosys_atm_co2_constant_value
 
-   real (kind=RKIND), pointer :: config_density0
+   real (kind=RKIND), pointer :: config_density0, &
+                                 config_custom_river_fluxes_lower_latitude, &
+                                 config_custom_river_fluxes_left_longitude, &
+                                 config_custom_river_fluxes_upper_latitude, &
+                                 config_custom_river_fluxes_right_longitude
+                                   
 
    type (block_type), pointer :: block_ptr
 
@@ -2035,7 +2041,7 @@ contains
                                                evaporationFlux, seaIceHeatFlux, icebergHeatFlux, &
                                                snowFlux, seaIceFreshWaterFlux, icebergFreshWaterFlux, &
                                                seaIceSalinityFlux, &
-                                               riverRunoffFlux, iceRunoffFlux, &
+                                               riverRunoffFlux, riverTransport, iceRunoffFlux, &
                                                removedRiverRunoffFlux, removedIceRunoffFlux, &
                                                shortWaveHeatFlux, rainFlux, &
                                                atmosphericPressure, iceFraction, &
@@ -2116,6 +2122,11 @@ contains
    call mpas_pool_get_config(domain % configs, 'config_remove_ais_river_runoff', config_remove_ais_river_runoff)
    call mpas_pool_get_config(domain % configs, 'config_remove_ais_ice_runoff', config_remove_ais_ice_runoff)
    call mpas_pool_get_config(domain % configs, 'config_cvmix_kpp_use_theory_wave', config_cvmix_kpp_use_theory_wave)
+   call mpas_pool_get_config(domain % configs, 'config_use_custom_river_fluxes', config_use_custom_river_fluxes)
+   call mpas_pool_get_config(domain % configs, 'config_custom_river_fluxes_lower_latitude', config_custom_river_fluxes_lower_latitude)
+   call mpas_pool_get_config(domain % configs, 'config_custom_river_fluxes_left_longitude', config_custom_river_fluxes_left_longitude)
+   call mpas_pool_get_config(domain % configs, 'config_custom_river_fluxes_upper_latitude', config_custom_river_fluxes_upper_latitude)
+   call mpas_pool_get_config(domain % configs, 'config_custom_river_fluxes_right_longitude', config_custom_river_fluxes_right_longitude)
 
    n = 0
    removedRiverRunoffFluxThisProc = 0.0_RKIND
@@ -2206,6 +2217,9 @@ contains
 
       call mpas_pool_get_array(meshPool, 'latCell', latCell)
       call mpas_pool_get_array(meshPool, 'areaCell', areaCell)
+      if (config_use_custom_river_fluxes) then
+          call mpas_pool_get_array(forcingPool, 'riverTransport', riverTransport)
+      end if 
 
       ! BGC fields
       if (config_use_ecosysTracers) then
@@ -2350,6 +2364,16 @@ contains
         end if
         if ( riverRunoffFluxField % isActive ) then
            riverRunoffFlux(i) = x2o_o % rAttr(index_x2o_Foxx_rofl, n)
+           ! If using custom river fluxes, override coupler values, set to zero and replace with values 
+           ! prescribed from netcdf file. Convert from m^3 s^-1 to kg m^-2 s^-1.
+           if (config_use_custom_river_fluxes .and. &
+              latCell(i) > config_custom_river_fluxes_lower_latitude .and. &
+              latCell(i) < config_custom_river_fluxes_upper_latitude .and. &
+              lonCell(i) > config_custom_river_fluxes_left_longitude .and. &
+              lonCell(i) < config_custom_river_fluxes_right_longitude) then
+              riverRunoffFlux(i) = 0.0_RKIND
+              riverRunoffFlux(i) = (riverTransport(i) * rho_sw) / areaCell(i)
+           end if 
            if (config_remove_ais_river_runoff) then
               if (latCell(i) < -1.04719666667_RKIND) then ! 60S in radians
                  removedRiverRunoffFlux(i) = riverRunoffFlux(i)
