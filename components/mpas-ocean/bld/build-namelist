@@ -715,6 +715,8 @@ if ($OCN_SGR eq 'data') {
 	add_default($nl, 'config_subglacial_runoff_mode');
 }
 add_default($nl, 'config_flux_attenuation_coefficient_subglacial_runoff');
+add_default($nl, 'config_use_atmospheric_river_temp');
+add_default($nl, 'config_atmospheric_river_temp_max');
 add_default($nl, 'config_sgr_flux_vertical_location');
 add_default($nl, 'config_use_sgr_opt_kpp');
 add_default($nl, 'config_use_sgr_opt_temp_prescribed');

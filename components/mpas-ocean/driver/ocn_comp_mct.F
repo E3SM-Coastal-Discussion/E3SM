@@ -1916,6 +1916,7 @@ contains
 !    o  duu10n -- 10m wind speed squared                   (m^2/s^2)
 !    o  co2prog-- bottom atm level prognostic co2
 !    o  co2diag-- bottom atm level diagnostic co2
+!    o  tbot -- bottom atm level temperature (K)
 !
 !-----------------------------------------------------------------------
 !
@@ -1988,7 +1989,8 @@ contains
                                   riverRunoffFluxField, iceRunoffFluxField, &
                                   removedRiverRunoffFluxField, removedIceRunoffFluxField, &
                                   shortWaveHeatFluxField, rainFluxField, &
-                                  atmosphericPressureField, iceFractionField, &
+                                  atmosphericPressureField, atmosphericTbotField, &
+                                  iceFractionField, &
                                   seaIcePressureField, windSpeedSquared10mField, &
                                   atmosphericCO2Field, atmosphericCO2_ALT_CO2Field,  &
                                   iceFluxDICField, &
@@ -2038,7 +2040,8 @@ contains
                                                riverRunoffFlux, iceRunoffFlux, &
                                                removedRiverRunoffFlux, removedIceRunoffFlux, &
                                                shortWaveHeatFlux, rainFlux, &
-                                               atmosphericPressure, iceFraction, &
+                                               atmosphericPressure, atmosphericTbot, &  
+                                               iceFraction, &
                                                seaIcePressure, windSpeedSquared10m, &
                                                atmosphericCO2, atmosphericCO2_ALT_CO2,  &
                                                windSpeedSquared10mCFC, &
@@ -2146,6 +2149,7 @@ contains
       call mpas_pool_get_field(forcingPool, 'shortWaveHeatFlux', shortWaveHeatFluxField)
       call mpas_pool_get_field(forcingPool, 'rainFlux', rainFluxField)
       call mpas_pool_get_field(forcingPool, 'atmosphericPressure', atmosphericPressureField)
+      call mpas_pool_get_field(forcingPool, 'atmosphericTbot', atmosphericTbotField)
       call mpas_pool_get_field(forcingPool, 'seaIcePressure', seaIcePressureField)
       call mpas_pool_get_field(forcingPool, 'iceFraction', iceFractionField)
       call mpas_pool_get_field(forcingPool, 'iceRunoffFlux', iceRunoffFluxField)
@@ -2187,6 +2191,7 @@ contains
       shortWaveHeatFlux => shortWaveHeatFluxField % array
       rainFlux => rainFluxField % array
       atmosphericPressure => atmosphericPressureField % array
+      atmosphericTbot => atmosphericTbotField % array
       seaIcePressure => seaIcePressureField % array
       iceFraction => iceFractionField % array
       iceRunoffFlux => iceRunoffFluxField % array
@@ -2380,6 +2385,10 @@ contains
         end if
         if ( atmosphericPressureField % isActive ) then
            atmosphericPressure(i) = x2o_o % rAttr(index_x2o_Sa_pslv,   n)
+        end if
+        if ( atmosphericTbotField % isActive ) then
+           ! Convert from K to C
+           atmosphericTbot(i) = (x2o_o % rAttr(index_x2o_Sa_tbot, n) - 273.15_RKIND)
         end if
         if ( seaIcePressureField % isActive ) then
            ! Set seaIcePressure to be limited to 5m of pressure
@@ -2707,6 +2716,9 @@ contains
    end if
    if ( atmosphericPressureField % isActive ) then
       call mpas_dmpar_exch_halo_field(atmosphericPressureField)
+   end if
+   if ( atmosphericTbotField % isActive ) then
+      call mpas_dmpar_exch_halo_field(atmosphericTbotField)
    end if
    if ( seaIcePressureField % isActive ) then
       call mpas_dmpar_exch_halo_field(seaIcePressureField)
@@ -3433,7 +3445,6 @@ contains
 !    o  duu10n -- 10m wind speed squared                   (m^2/s^2)
 !    o  co2prog-- bottom atm level prognostic co2
 !    o  co2diag-- bottom atm level diagnostic co2
-!
 !-----------------------------------------------------------------------
 !
 ! !REVISION HISTORY:

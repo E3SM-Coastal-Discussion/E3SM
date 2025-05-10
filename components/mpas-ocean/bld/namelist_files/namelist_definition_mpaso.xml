@@ -1196,6 +1196,22 @@ Valid values: Any positive real number.
 Default: Defined in namelist_defaults.xml
 </entry>
 
+<entry id="config_use_atmospheric_river_temp" type="logical"
+	category="forcing" group="forcing">
+If true, sets river temperatures equal to the lowest level atmospheric air temperature from coupler. If false, river temperatures are calculated using the nearest neighbor SST.
+
+Valid values: .true. or .false.
+Default: Defined in namelist_defaults.xml
+</entry>
+
+<entry id="config_atmospheric_river_temp_max" type="real"
+	category="forcing" group="forcing">
+The maximum atmospheric temperature from coupler used to prescribe river temperatures.
+
+Valid values: Any positive real number.
+Default: Defined in namelist_defaults.xml
+</entry>
+
 <entry id="config_subglacial_runoff_mode" type="char*1024"
 	category="forcing" group="forcing">
 Selects the mode in which subglacial runoff fluxes are implemented.
